@@ -1,13 +1,26 @@
 #!/usr/bin/python3
 """Module that defines a db storage"""
-from sqlalchemy import create_engine
 import os
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+from models.base_model import Base
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
+metadata_obj = MetaData()
 
 
 class DBStorage:
     """Class tha defines a storage of models in db format"""
     __engine = None
     __session = None
+
+    clss = [User, Place, State, City, Amenity, Review]
 
     def __init__(self):
         dialect = "mysql"
@@ -22,34 +35,42 @@ class DBStorage:
                 pool_pre_ping=True)
 
         if os.getenv("HBNB_ENV") == "test":
-            """
-            a = Metadata(link=self.__engine)
-            a.drop_all()
-            """
-            """DROP ALL TABLES"""
+            metadata_obj.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls is not None:
-            return {k: v for k, v in DBStorage.__session.items() \
-                    if type(v) == cls}
-        return DBStorage.__session
+        session = self.__session()
+        d = {}
+        clss = self.clss
+        if (cls is not None and cls in self.clss) or cls is None:
+            if cls is not None:
+                clss = [cls]
+            for x in clss:
+                results = session.query(cls)
+                for result in results:
+                    d[result.__class__ + "." + result.id] = result
+            return d
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
-
-    def delete(self, obj=None):
-        """Deletes input object from storage"""
-        if obj is not None:
-            self.all().pop(obj.to_dict()['__class__'] + '.' + obj.id, None)
+        session = self.__session()
+        session.add(obj)
 
     def save(self):
         """Saves storage dictionary to file"""
-        with open(FileStorage.__file_path, 'w') as f:
-            temp = {}
-            temp.update(DBStorage.__session)
-            for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+        session = self.__session()
+        session.commit()
+
+    def delete(self, obj=None):    
+        """Deletes input object from storage"""
+        if obj is not None and type(obj) in self.clss:
+            session = self.__session()
+            session.query(type(obj)).filter(type(obj).id == obj.id).delete()
+
+    def reload(self):
+        Base.metadata.create_all(self.__engine)
+
+        session_factory = sessionmaker(bind=self.__engine,
+                expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
 
