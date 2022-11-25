@@ -15,6 +15,6 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         from models import storage
-        objs = [x for x in storage.all().values() \
-                if x['__class__'] == "City" and x['state_id'] = self.id]
+        objs = [x for x in storage.all().values() if x.__class__ == "City" and x.state_id == self.id]
+        return objs
 

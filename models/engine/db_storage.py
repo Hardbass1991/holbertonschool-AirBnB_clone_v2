@@ -41,12 +41,12 @@ class DBStorage:
         """Returns a dictionary of models currently in storage"""
         session = self.__session()
         d = {}
-        clss = self.clss
+        A = list(self.clss)
         if (cls is not None and cls in self.clss) or cls is None:
             if cls is not None:
-                clss = [cls]
-            for x in clss:
-                results = session.query(cls)
+                A = [cls]
+            for x in A:
+                results = session.query(x)
                 for result in results:
                     d[result.__class__ + "." + result.id] = result
             return d

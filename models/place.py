@@ -38,15 +38,16 @@ class Place(BaseModel, Base):
     @property
     def reviews(self):
         from models import storage
-        objs = [x for x in storage.all().values() \
-                if x['__class__'] == "Review" and x['place_id'] = self.id]
+        objs = [x for x in storage.all().values() if x.__class__ == "Review" and x.place_id == self.id]
+        return objs
 
     @property
     def amenities(self):
         from models import storage
         objs = [x for x in storage.all().values() \
-                if x['__class__'] == "Amenity" \
-                and x['id'] in self.amenity_ids]
+                if x.__class__ == "Amenity" \
+                and x.id in self.amenity_ids]
+        return objs
 
     @amenities.setter
     def amenities(self, obj):
