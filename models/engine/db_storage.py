@@ -48,7 +48,7 @@ class DBStorage:
             for x in A:
                 results = session.query(x)
                 for result in results:
-                    d[result.__class__ + "." + result.id] = result
+                    d[result.__class__.__name__ + "." + result.id] = result
             return d
 
     def new(self, obj):
@@ -73,4 +73,3 @@ class DBStorage:
         session_factory = sessionmaker(bind=self.__engine,
                 expire_on_commit=False)
         self.__session = scoped_session(session_factory)
-
