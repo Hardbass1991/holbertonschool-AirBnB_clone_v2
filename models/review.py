@@ -6,9 +6,9 @@ from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Review(BaseModel, Base):
-    """ Review class to store review information """
-    if storage_type == "db":
+if storage_type == "db":
+    class Review(BaseModel, Base):
+        """ Review class to store review information """
         __tablename__ = "reviews"
         text = Column(String(1024), nullable=False)
         place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
@@ -17,7 +17,9 @@ class Review(BaseModel, Base):
         user = relationship("User", back_populates="reviews")
         place = relationship("Place", back_populates="reviews")
 
-    else:
+else:
+    class Review(BaseModel):
+        """ Review class to store review information to BaseModel"""
         text = ""
         place_id = ""
         user_id = ""
