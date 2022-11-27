@@ -7,13 +7,15 @@ from sqlalchemy import Column, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Amenity(BaseModel, Base):
-    """Amenity class"""
-    if storage_type == "db":
+if storage_type == "db":
+    class Amenity(BaseModel, Base):
+        """Amenity class"""
         __tablename__ = "amenities"
         name = Column(String(128), nullable=False)
 
         place_amenities = relationship("Place", back_populates="amenities",
-            secondary=place_amenity)
-    else:
+                                       secondary=place_amenity)
+else:
+    class Amenity(BaseModel):
+        """Amenity class to BaseModel"""
         name = ""
