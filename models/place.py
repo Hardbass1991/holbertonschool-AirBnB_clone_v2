@@ -6,16 +6,15 @@ from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 place_amenity = Table("place_amenity", Base.metadata,
-        Column("place_id", String(60), ForeignKey("places.id"),
-            primary_key=True, nullable=False),
-        Column("amenity_id", String(60), ForeignKey("amenities.id"),
-            primary_key=True, nullable=False)
-)
+                      Column("place_id", String(60), ForeignKey("places.id"),
+                             primary_key=True, nullable=False),
+                      Column("amenity_id", String(60),
+                             ForeignKey("amenities.id"),
+                             primary_key=True, nullable=False))
 
-
-class Place(BaseModel, Base):
-    """ A place to stay """
-    if storage_type == "db":
+if storage_type == "db":
+    class Place(BaseModel, Base):
+        """ A place to stay """
         __tablename__ = "places"
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
@@ -32,10 +31,12 @@ class Place(BaseModel, Base):
         user = relationship("User", back_populates="places")
         cities = relationship("City", back_populates="places")
         reviews = relationship("Review", back_populates="place",
-            cascade="all, delete")
+                               cascade="all, delete")
         amenities = relationship("Amenity", back_populates="place_amenities",
-            secondary=place_amenity, viewonly=False)
-    else:
+                                 secondary=place_amenity, viewonly=False)
+else:
+    class Place(BaseModel):
+        """ A place to stay to BaseModel"""
         city_id = ""
         user_id = ""
         name = ""
@@ -52,15 +53,16 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             from models import storage
-            objs = [x for x in storage.all().values() if x.__class__ == "Review" and x.place_id == self.id]
+            objs = [x for x in storage.all().values()
+                    if x.__class__ == "Review" and x.place_id == self.id]
             return objs
 
         @property
         def amenities(self):
             from models import storage
-            objs = [x for x in storage.all().values() \
-                if x.__class__ == "Amenity" \
-                and x.id in self.amenity_ids]
+            objs = [x for x in storage.all().values()
+                    if x.__class__ == "Amenity"
+                    and x.id in self.amenity_ids]
             return objs
 
         @amenities.setter
