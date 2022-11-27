@@ -6,8 +6,8 @@ from models import storage_type
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 
-Base = declarative_base()
 
+Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
@@ -32,7 +32,7 @@ class BaseModel:
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'], 
                     '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
-            
+
             self.__dict__.update(kwargs)
 
     def __str__(self):
