@@ -6,9 +6,9 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
-class User(BaseModel, Base):
-    """This class defines a user by various attributes"""
-    if storage_type == "db":
+if storage_type == "db":
+    class User(BaseModel, Base):
+        """This class defines a user by various attributes"""
         __tablename__ = "users"
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
@@ -16,10 +16,12 @@ class User(BaseModel, Base):
         last_name = Column(String(128), nullable=True)
 
         places = relationship("Place", back_populates="user",
-                              cascade="all, delete")
+                              cascade="all, delete, delete-orphan")
         reviews = relationship("Review", back_populates="user",
-                               cascade="all, delete")
-    else:
+                               cascade="all, delete, delete-orphan")
+else:
+    class User(BaseModel):
+        """This class defines a user by various attributes to BaseModel"""
         email = ""
         password = ""
         first_name = ""
