@@ -30,7 +30,7 @@ def C_text(text=""):
 @app.route("/python/<text>", strict_slashes=False)
 def python_text(text="is cool"):
     """View that display 'Python' followed by input text"""
-    if text == "" or text.isspace():
+    if text is None or text == "" or text.isspace():
         text = "is cool"
     text = text.replace("_", " ")
     return "Python {}".format(text)
