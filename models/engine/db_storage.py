@@ -30,9 +30,10 @@ class DBStorage:
         host = os.getenv("HBNB_MYSQL_HOST")
         database = os.getenv("HBNB_MYSQL_DB")
 
-        self.__engine = create_engine(dialect + "+" + driver + "://" + 
-                username + ":" + password + "@" + host + "/" + database,
-                pool_pre_ping=True)
+        self.__engine = create_engine(dialect + "+" + driver + "://" +
+                                      username + ":" + password + "@" +
+                                      host + "/" + database,
+                                      pool_pre_ping=True)
 
         if os.getenv("HBNB_ENV") == "test":
             metadata_obj.drop_all(bind=self.__engine)
@@ -61,7 +62,7 @@ class DBStorage:
         session = self.__session()
         session.commit()
 
-    def delete(self, obj=None):    
+    def delete(self, obj=None):
         """Deletes input object from storage"""
         if obj is not None and type(obj) in self.clss:
             session = self.__session()
@@ -71,5 +72,5 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
 
         session_factory = sessionmaker(bind=self.__engine,
-                expire_on_commit=False)
+                                       expire_on_commit=False)
         self.__session = scoped_session(session_factory)
