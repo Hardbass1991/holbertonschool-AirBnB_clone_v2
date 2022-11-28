@@ -27,10 +27,10 @@ if storage_type == "db":
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float)
         longitude = Column(Float)
-        amenity_ids = []
+        #amenity_ids = []
 
-        user = relationship("User", back_populates="places")
-        cities = relationship("City", back_populates="places")
+        #user = relationship("User", back_populates="places")
+        #cities = relationship("City", back_populates="places")
         reviews = relationship("Review", back_populates="place",
                                cascade="all, delete")
         amenities = relationship("Amenity", back_populates="place_amenities",
@@ -61,13 +61,13 @@ else:
         @property
         def amenities(self):
             from models import storage
-            """objs = [x for x in storage.all().values()
+            objs = [x for x in storage.all().values()
                     if x.__class__.__name__ == "Amenity"
                     and x.id in self.amenity_ids]
             return objs
-            """
-            self.amenity_ids = storage.all(Amenity)
-            return self.amenity_ids
+
+            """self.amenity_ids = storage.all(Amenity)
+            return self.amenity_ids"""
 
         @amenities.setter
         def amenities(self, obj):
