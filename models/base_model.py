@@ -9,14 +9,15 @@ from sqlalchemy import Column, Integer, String, DateTime
 
 Base = declarative_base()
 
+
 class BaseModel:
     """A base class for all hbnb models"""
     if storage_type == "db":
         id = Column(String(60), nullable=False, primary_key=True)
         created_at = Column(DateTime, nullable=False,
-                default=datetime.utcnow())
+                            default=datetime.utcnow())
         updated_at = Column(DateTime, nullable=False,
-                default=datetime.utcnow())
+                            default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
@@ -27,10 +28,10 @@ class BaseModel:
             if kwargs:
                 self.__dict__.update(kwargs)
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'], 
-                    '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'], 
-                    '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
 
             self.__dict__.update(kwargs)

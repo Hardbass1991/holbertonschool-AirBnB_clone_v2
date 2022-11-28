@@ -4,6 +4,7 @@ from models import storage_type
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+import models
 
 place_amenity = Table("place_amenity", Base.metadata,
                       Column("place_id", String(60), ForeignKey("places.id"),
@@ -61,11 +62,13 @@ else:
         def amenities(self):
             from models import storage
             objs = [x for x in storage.all().values()
-                    if x.__class__ == "Amenity"
+                    if x.__class__.__name__ == "Amenity"
                     and x.id in self.amenity_ids]
             return objs
+            """self.amenity_ids = storage.all(Amenity)
+            return self.amenity_ids"""
 
         @amenities.setter
         def amenities(self, obj):
-            if obj.__clas__ == "Amenity":
+            if obj.__clas__.__name__ == "Amenity":
                 self.amenity_ids.append(obj.id)
