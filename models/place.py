@@ -27,7 +27,7 @@ if storage_type == "db":
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float)
         longitude = Column(Float)
-        #amenity_ids = []
+#       amenity_ids = []
 
         user = relationship("User", back_populates="places")
         cities = relationship("City", back_populates="places")
