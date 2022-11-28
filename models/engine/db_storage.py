@@ -43,6 +43,10 @@ class DBStorage:
         session = self.__session()
         d = {}
         A = list(self.clss)
+
+        if type(cls) is str:
+            return d
+
         if (cls is not None and cls in self.clss) or cls is None:
             if cls is not None:
                 A = [cls]
