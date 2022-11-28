@@ -61,12 +61,13 @@ else:
         @property
         def amenities(self):
             from models import storage
-            objs = [x for x in storage.all().values()
+            """objs = [x for x in storage.all().values()
                     if x.__class__.__name__ == "Amenity"
                     and x.id in self.amenity_ids]
             return objs
-            """self.amenity_ids = storage.all(Amenity)
-            return self.amenity_ids"""
+            """
+            self.amenity_ids = storage.all(Amenity)
+            return self.amenity_ids
 
         @amenities.setter
         def amenities(self, obj):
