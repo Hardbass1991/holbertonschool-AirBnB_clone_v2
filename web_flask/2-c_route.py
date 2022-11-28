@@ -18,7 +18,11 @@ def HBNB():
 
 @app.route("/c/<text>", strict_slashes=False)
 def C_text(text=""):
-    """View that displays 'C' followed by input string"""
+    """View that displays 'C' followed by input string
+
+    Keyword arguments:
+    text - input text
+    """
     text = text.replace("_", " ")
     return f"C {text}"
 
