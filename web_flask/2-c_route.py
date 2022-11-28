@@ -16,7 +16,7 @@ def HBNB():
     return "HBNB"
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route("/c/<text>", strict_slashes=False)
 def C_text(text=""):
     """View that displays 'C' followed by input string"""
     return f"C {text.replace("_", " ")}"
