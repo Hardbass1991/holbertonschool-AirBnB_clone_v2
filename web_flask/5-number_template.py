@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module that starts a Flask web application"""
-from flask import Flask
+from flask import Flask, abort, render_template
 app = Flask(__name__)
 
 
@@ -27,13 +27,27 @@ def C_text(text=""):
     return "C {}".format(text)
 
 
-
-@app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
 def python_text(text="is cool"):
     """View that display 'Python' followed by input text"""
     text = text.replace("_", " ")
     return "Python {}".format(text)
+
+
+@app.route("/number/<n>", strict_slashes=False)
+def number_n(n):
+    """View that displays 'n is a number' if n is integer"""
+    if not n.isnumeric():
+        abort(404)
+    return "{} is a number".format(n)
+
+
+@app.route("/number_template/<n>", strict_slashes=False)
+def number_template(n):
+    """View that renders a template with input context"""
+    if not n.isnumeric():
+        abort(404)
+    return render_template('5-number.html', n=n)
 
 
 if __name__ == "__main__":
