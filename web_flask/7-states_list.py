@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Module that displays template with data from storage"""
 from models import storage, storage_type
 from models.state import State
 from flask import Flask, abort, render_template
