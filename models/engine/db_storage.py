@@ -20,7 +20,11 @@ class DBStorage:
     __engine = None
     __session = None
 
-    clss = [User, Place, State, City, Amenity, Review]
+    clss = {
+                'User': User, 'Place': Place,
+                'State': State, 'City': City, 'Amenity': Amenity,
+                'Review': Review
+              }
 
     def __init__(self):
         dialect = "mysql"
@@ -42,19 +46,19 @@ class DBStorage:
         """Returns a dictionary of models currently in storage"""
         session = self.__session()
         d = {}
-        A = list(self.clss)
-
-        if type(cls) is str:
+        if cls not in self.clss.values():
             return d
 
-        if (cls is not None and cls in self.clss) or cls is None:
-            if cls is not None:
-                A = [cls]
-            for x in A:
-                results = session.query(x)
+        if cls is not None:
+            results = session.query(cls).all()
+            for result in results:
+                d[result.__class__.__name__ + "." + result.id] = result
+        else:
+            for x in self.clss.values():
+                results = session.query(x).all()
                 for result in results:
                     d[result.__class__.__name__ + "." + result.id] = result
-            return d
+        return d
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -78,3 +82,6 @@ class DBStorage:
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         self.__session = scoped_session(session_factory)
+
+    def close(self):
+        self.__session.remove()

@@ -2,6 +2,7 @@
 """ State Module for HBNB project """
 from models import storage_type
 from models.base_model import BaseModel, Base
+from models.city import City
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
@@ -22,5 +23,5 @@ else:
         def cities(self):
             from models import storage
             objs = [x for x in storage.all().values()
-                    if x.__class__ == "City" and x.state_id == self.id]
+                    if type(x) == City and x.state_id == self.id]
             return objs
