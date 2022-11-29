@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module that starts a Flask web application"""
-from flask import Flask
+from flask import Flask, abort
 app = Flask(__name__)
 
 
@@ -37,8 +37,9 @@ def python_text(text="is cool"):
 @app.route("/number/<n>", strict_slashes=False)
 def number_n(n):
     """View that displays 'n is a number' if n is integer"""
-    if n.isnumeric():
-        return "{} is a number".format(n)
+    if not n.isnumeric():
+        abort(404)
+    return "{} is a number".format(n)
 
 
 if __name__ == "__main__":
