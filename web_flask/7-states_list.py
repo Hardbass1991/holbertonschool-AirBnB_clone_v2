@@ -1,8 +1,10 @@
+#!/usr/bin/python3
 from models import storage, storage_type
 from models.state import State
 from flask import Flask, abort, render_template
 
 app = Flask(__name__)
+
 
 @app.route("/states_list", strict_slashes=False)
 def number_template():
