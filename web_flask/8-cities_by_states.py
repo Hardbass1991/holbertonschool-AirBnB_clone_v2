@@ -20,7 +20,7 @@ def cities_by_states():
             d[state.name]["cities"] = state.cities
         else:
             d[state.name]["cities"] = state.cities()
-            
+
     storage.close()
 
     return render_template('8-cities_by_states.html', d=d)
