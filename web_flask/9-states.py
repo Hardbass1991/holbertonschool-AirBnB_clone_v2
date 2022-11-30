@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Module that displays two views showing a list of states and a list of cities by state"""
+"""Module that displays two views showing a list of states
+and a list of cities by state"""
 from models import storage, storage_type
 from models.city import City
 from models.state import State
@@ -26,7 +27,7 @@ def cities_by_states(id):
 
     if not states:
         storage.close()
-        return render_template("9-states.html", d=d, state_id=id)  
+        return render_template("9-states.html", d=d, state_id=id)
 
     for state in states:
         d[state.name] = {}
